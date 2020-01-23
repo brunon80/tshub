@@ -32,10 +32,20 @@ const Login: React.SFC<LoginProps> = observer(({ navigation }: LoginProps) => {
     }
 
     return (
-        <SafeAreaView style={{ marginTop: StatusBar.currentHeight }}>
+        <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
             <View style={{ padding: 20 }}>
-                <TextInput placeholder="Username" value={username} onChangeText={setUsername} />
-                <Button disabled={!username} title="Sign in" onPress={signin} />
+                <TextInput
+                    style={{
+                        marginVertical: 10,
+                        paddingBottom: 8,
+                        fontSize: 18,
+                    }}
+                    underlineColorAndroid="gray"
+                    placeholder="Username"
+                    value={username}
+                    onChangeText={setUsername}
+                />
+                <Button disabled={!username} title="Ver Repositorios" onPress={signin} />
             </View>
         </SafeAreaView>
     )

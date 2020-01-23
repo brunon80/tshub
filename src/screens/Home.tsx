@@ -1,5 +1,5 @@
-import React from 'react'
-import { View, Text, SafeAreaView, StatusBar } from 'react-native'
+import React, { useState, useEffect, ReactElement } from 'react'
+import { View, Text, SafeAreaView, StatusBar, FlatList } from 'react-native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RouteProp } from '@react-navigation/native'
 import { observer } from 'mobx-react'
@@ -16,17 +16,52 @@ export interface HomeProps {
     route: AuthScreenRouteProp
 }
 
-const Home: React.SFC<HomeProps> = ({ navigation, route }: HomeProps) => {
+interface Repository {
+    id: number
+    name: string
+    full_name: string
+    description: string
+}
+
+const Home: React.SFC<HomeProps> = observer(({ navigation, route }: HomeProps) => {
+    const [reps, setReps] = useState<[Repository]>()
+
     const { baseStore } = useStores()
     console.log(baseStore.username)
 
-    return (
-        <SafeAreaView style={{ marginTop: StatusBar.currentHeight }}>
-            <View>
-                <Text>Home</Text>
+    async function fetchReps(): Promise<void> {
+        const response = await baseStore.get(`https://api.github.com/users/${baseStore.username}/repos`)
+        setReps(response as [Repository])
+    }
+
+    useEffect(() => {
+        fetchReps()
+    }, [])
+
+    function _renderItem({ item }: { item: Repository }): ReactElement {
+        return (
+            <View
+                style={{
+                    borderBottomColor: 'lightgray',
+                    borderBottomWidth: 1,
+                    padding: 10,
+                }}
+            >
+                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Nome: {item.name}</Text>
+                <Text>Nome Completo: {item.full_name}</Text>
+                <Text>Descrição: {item.description}</Text>
             </View>
+        )
+    }
+
+    return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+            <View style={{ justifyContent: 'center', alignItems: 'center', margin: 20 }}>
+                <Text style={{ fontSize: 20 }}>Repositorios de {baseStore.username}</Text>
+            </View>
+            <FlatList data={reps} renderItem={_renderItem} keyExtractor={(item): string => item.id.toString()} />
         </SafeAreaView>
     )
-}
+})
 
 export default Home

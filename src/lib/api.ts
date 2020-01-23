@@ -1,7 +1,7 @@
 export interface ApiParams {
     url: string
-    payload: object | undefined
-    type: string
+    payload?: object | undefined
+    type?: string
 }
 
 async function api({ url, payload, type = 'GET' }: ApiParams): Promise<object> {
