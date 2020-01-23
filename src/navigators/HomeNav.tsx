@@ -1,23 +1,19 @@
-import * as React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import * as React from 'react'
+import { createStackNavigator } from '@react-navigation/stack'
 import Home from '../screens/Home'
 
-type HomeStackParamList = {
-    Home: { user: string } | undefined;
-  };
+export type HomeStackParamList = {
+    Home: undefined
+}
 
-const Stack = createStackNavigator<HomeStackParamList>();
+const Stack = createStackNavigator<HomeStackParamList>()
 
-function HomeNav() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen 
-        name="Home" 
-        component={Home} 
-        initialParams={{ user: 'brunon80' }}
-      />
-    </Stack.Navigator>
-  );
+const HomeNav: React.FC = () => {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen name="Home" component={Home} />
+        </Stack.Navigator>
+    )
 }
 
 export default HomeNav
