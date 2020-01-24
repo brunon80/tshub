@@ -30,8 +30,8 @@ const Home: React.SFC<HomeProps> = observer(({ navigation, route }: HomeProps) =
     console.log(baseStore.username)
 
     async function fetchReps(): Promise<void> {
-        const response = await baseStore.get(`https://api.github.com/users/${baseStore.username}/repos`)
-        setReps(response as [Repository])
+        const response = await baseStore.get<[Repository]>(`https://api.github.com/users/${baseStore.username}/repos`)
+        setReps(response)
     }
 
     useEffect(() => {
