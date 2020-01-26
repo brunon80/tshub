@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ReactElement } from 'react'
-import { View, Text, SafeAreaView, StatusBar, FlatList } from 'react-native'
+import { View, Text, SafeAreaView, StatusBar, FlatList, TouchableOpacity } from 'react-native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RouteProp } from '@react-navigation/native'
 import { observer } from 'mobx-react'
@@ -25,6 +25,18 @@ interface Repository {
 
 const Home: React.SFC<HomeProps> = observer(({ navigation, route }: HomeProps) => {
     const [reps, setReps] = useState<[Repository]>()
+
+    navigation.setOptions({
+        headerLeft: function right() {
+            return (
+                <TouchableOpacity onPress={(): void => navigation.goBack()}>
+                    <View style={{ marginHorizontal: 15 }}>
+                        <Text>{'Voltar'}</Text>
+                    </View>
+                </TouchableOpacity>
+            )
+        },
+    })
 
     const { baseStore } = useStores()
     console.log(baseStore.username)
