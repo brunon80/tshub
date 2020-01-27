@@ -1,8 +1,9 @@
 import React, { useState, useEffect, ReactElement } from 'react'
-import { View, Text, SafeAreaView, StatusBar, FlatList } from 'react-native'
+import { View, Text, SafeAreaView, StatusBar, FlatList, TouchableOpacity } from 'react-native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RouteProp } from '@react-navigation/native'
-import { observer } from 'mobx-react'
+import { observer, useLocalStore } from 'mobx-react'
+import { Ionicons } from '@expo/vector-icons'
 
 import { HomeStackParamList } from '../navigators/HomeNav'
 import { useStores } from '../hooks/useStores'
@@ -19,19 +20,39 @@ export interface HomeProps {
 interface Repository {
     id: number
     name: string
-    full_name: string
-    description: string
+    full_name?: string
+    description?: string
 }
 
 const Home: React.SFC<HomeProps> = observer(({ navigation, route }: HomeProps) => {
-    const [reps, setReps] = useState<[Repository]>()
-
     const { baseStore } = useStores()
-    console.log(baseStore.username)
+
+    const [reps, setReps] = useState<[Repository]>()
+    const store = useLocalStore<Repository>(() => ({ id: 1, name: baseStore.username }))
+
+    navigation.setOptions({
+        title: `Repositórios de ${store.name}`,
+        headerLeft: function right() {
+            return (
+                <TouchableOpacity onPress={(): void => navigation.goBack()}>
+                    <View
+                        style={{
+                            marginHorizontal: 15,
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Ionicons style={{ marginRight: 10, fontSize: 25 }} name="ios-arrow-back" />
+                    </View>
+                </TouchableOpacity>
+            )
+        },
+    })
 
     async function fetchReps(): Promise<void> {
-        const response = await baseStore.get(`https://api.github.com/users/${baseStore.username}/repos`)
-        setReps(response as [Repository])
+        const response = await baseStore.get<[Repository]>(`https://api.github.com/users/${baseStore.username}/repos`)
+        setReps(response)
     }
 
     useEffect(() => {
@@ -56,9 +77,6 @@ const Home: React.SFC<HomeProps> = observer(({ navigation, route }: HomeProps) =
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
-            <View style={{ justifyContent: 'center', alignItems: 'center', margin: 20 }}>
-                <Text style={{ fontSize: 20 }}>Repositorios de {baseStore.username}</Text>
-            </View>
             <FlatList data={reps} renderItem={_renderItem} keyExtractor={(item): string => item.id.toString()} />
         </SafeAreaView>
     )

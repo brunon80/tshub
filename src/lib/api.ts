@@ -4,7 +4,7 @@ export interface ApiParams {
     type?: string
 }
 
-async function api({ url, payload, type = 'GET' }: ApiParams): Promise<object> {
+async function api<T>({ url, payload, type = 'GET' }: ApiParams): Promise<T> {
     const params = {
         method: type,
         body: payload && JSON.stringify(payload),

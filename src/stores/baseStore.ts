@@ -4,8 +4,8 @@ import api from '../lib/api'
 class BaseStore {
     @observable username = ''
 
-    @action async get(url): Promise<object> {
-        const response = await api({ url })
+    @action async get<T>(url: string): Promise<T> {
+        const response = await api<T>({ url })
         return response
     }
 }
