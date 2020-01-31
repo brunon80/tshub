@@ -1,6 +1,6 @@
 import React from 'react'
 import RootNav from './src/navigators/RootNav'
-import { enableScreens } from 'react-native-screens';
+import { enableScreens } from 'react-native-screens'
 
 enableScreens()
 
