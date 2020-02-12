@@ -77,7 +77,6 @@ const Home: React.SFC<HomeProps> = observer(({ navigation, route }: HomeProps) =
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
-            {reps?.map(item => console.log(item.name))}
             <FlatList data={reps} renderItem={_renderItem} keyExtractor={(item): string => item.id.toString()} />
         </SafeAreaView>
     )
